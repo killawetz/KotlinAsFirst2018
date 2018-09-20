@@ -71,7 +71,6 @@ fun ageDescription(age: Int): String = when {
     else -> ""
 }
 
-
 /**
  * Простая
  *
