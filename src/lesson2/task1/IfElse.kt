@@ -80,7 +80,12 @@ fun ageDescription(age: Int): String = when {
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = TODO()
+                   t3: Double, v3: Double): Double {
+    var halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2
+    if (halfWay <= t1 * v1) return halfWay / v1 else
+        if (halfWay <= t1 * v1 + t2 * v2) return (halfWay - v1 * t1) / v2 + t1
+        else return t1 + t2 + (halfWay - v1 * t1 - v2 * t2) / v3
+}
 
 /**
  * Простая
