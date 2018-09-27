@@ -24,8 +24,7 @@ fun isNumberHappy(number: Int): Boolean {
     val secondDigit = number % 1000 / 100
     val thirdDigit = number % 1000 % 100 / 10
     val fourthDigit = number % 1000 % 100 % 10
-    if (firstDigit + secondDigit == thirdDigit + fourthDigit) return true
-    else return false
+    return firstDigit + secondDigit == thirdDigit + fourthDigit
 }
 
 /**
@@ -35,10 +34,7 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if ((x1 == x2 || y1 == y2) || sqr(x1 - x2) == sqr(y1 - y2)) return true
-    else return false
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = (x1 == x2 || y1 == y2) || sqr(x1 - x2) == sqr(y1 - y2)
 
 
 /**
@@ -66,8 +62,7 @@ fun daysInMonth(month: Int, year: Int): Int = when {
 fun circleInside(x1: Double, y1: Double, r1: Double,
                  x2: Double, y2: Double, r2: Double): Boolean {
     if (abs(r1) > abs(r2)) return false
-    else (if (sqr(x2 - x1) + sqr(y2 - y1) <= sqr(r2 - r1)) return true
-    else return false)
+    else return sqr(x2 - x1) + sqr(y2 - y1) <= sqr(r2 - r1)
 }
 
 /**
@@ -80,7 +75,7 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
-    a <= r && b <= s || b <= r &&  a <= s -> true
+    a <= r && b <= s || b <= r && a <= s -> true
     b <= r && c <= s || c <= r && b <= s -> true
     a <= r && c <= s || c <= r && a <= s -> true
     else -> false
