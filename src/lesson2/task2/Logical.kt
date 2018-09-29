@@ -4,12 +4,13 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Пример
  *
  * Лежит ли точка (x, y) внутри окружности с центром в (x0, y0) и радиусом r?
-*/
+ */
 fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
         sqr(x - x0) + sqr(y - y0) <= sqr(r)
 
@@ -19,13 +20,9 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean {
-    val firstDigit = number / 1000
-    val secondDigit = number % 1000 / 100
-    val thirdDigit = number % 1000 % 100 / 10
-    val fourthDigit = number % 1000 % 100 % 10
-    return firstDigit + secondDigit == thirdDigit + fourthDigit
-}
+fun isNumberHappy(number: Int): Boolean =
+        number / 1000 + number / 100 % 10 == number % 100 / 10 + number % 10
+
 
 /**
  * Простая
@@ -47,9 +44,7 @@ fun daysInMonth(month: Int, year: Int): Int = when {
     month == 2 && (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) -> 29
     month == 2 -> 28
     (month < 8 && month % 2 != 0) || (month >= 8 && month % 2 == 0) -> 31
-    (month < 8 && month % 2 == 0) -> 30
     else -> 30
-
 }
 
 /**
@@ -60,10 +55,7 @@ fun daysInMonth(month: Int, year: Int): Int = when {
  * Вернуть true, если утверждение верно
  */
 fun circleInside(x1: Double, y1: Double, r1: Double,
-                 x2: Double, y2: Double, r2: Double): Boolean {
-    if (abs(r1) > abs(r2)) return false
-    else return sqr(x2 - x1) + sqr(y2 - y1) <= sqr(r2 - r1)
-}
+                 x2: Double, y2: Double, r2: Double): Boolean = sqrt(sqr(x2 - x1) + sqr(y2 - y1)) + r1 <= sqrt(sqr(r2))
 
 /**
  * Средняя
@@ -74,9 +66,11 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
-    a <= r && b <= s || b <= r && a <= s -> true
-    b <= r && c <= s || c <= r && b <= s -> true
-    a <= r && c <= s || c <= r && a <= s -> true
-    else -> false
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val maxBrick = maxOf(a,b,c)
+    val minBrick = minOf(a,b,c)
+    val averageBrick = a + b + c - maxBrick - minBrick
+    val maxPort = maxOf(r,s)
+    val minPort = minOf(r,s)
+    return maxPort >= averageBrick && minPort >= minBrick
 }
