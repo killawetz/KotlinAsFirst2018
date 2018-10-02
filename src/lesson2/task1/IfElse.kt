@@ -146,11 +146,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val maxNumber = maxOf(a, b, c)
     val minNumber = minOf(a, b, c)
     val averageNumber = a + b + c - maxNumber - minNumber
+    val triangleType = sqr(maxNumber) - sqr(minNumber) - sqr(averageNumber)
     return when {
         maxNumber > minNumber + averageNumber -> -1
-        sqr(maxNumber) < sqr(minNumber) + sqr(averageNumber) -> 0
-        sqr(maxNumber) > sqr(minNumber) + sqr(averageNumber) -> 2
-        sqr(maxNumber) == sqr(minNumber) + sqr(averageNumber) -> 1
+        triangleType < 0 -> 0
+        triangleType > 0 -> 2
+        triangleType == 0.0 -> 1
         else -> -1
     }
 }
