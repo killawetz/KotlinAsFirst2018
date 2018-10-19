@@ -74,7 +74,7 @@ fun digitNumber(n: Int): Int {
     var number = n
     if (number == 0) return 1
     else
-        while (number > 0) {
+        while (number != 0) {
             amount++
             number /= 10
         }
@@ -150,8 +150,9 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
+    if (n == 1 || m == 1) return true
     if (m % n == 0 || n % m == 0) return false
-    for (i in 2..sqrt(minOf(n,m).toDouble()).toInt()) {
+    for (i in 2..sqrt(minOf(n, m).toDouble()).toInt()) {
         if (m % i == 0 && n % i == 0) return false
     }
     return true
@@ -288,7 +289,7 @@ fun squareSequenceDigit(n: Int): Int {
         number++
         bigNumber = sqr(number)
         count += digitNumber(bigNumber.toInt()).toDouble()
-        if (n - count <= 0) return (bigNumber/ pow(10.0, count - n) % 10.0).toInt()
+        if (n - count <= 0) return (bigNumber / pow(10.0, count - n) % 10.0).toInt()
     }
 }
 
@@ -309,6 +310,6 @@ fun fibSequenceDigit(n: Int): Int {
         number++
         bigNumber = fib(number).toDouble()
         count += digitNumber(bigNumber.toInt()).toDouble()
-        if (n - count <= 0) return (bigNumber/ pow(10.0, count - n) % 10.0).toInt()
+        if (n - count <= 0) return (bigNumber / pow(10.0, count - n) % 10.0).toInt()
     }
 }

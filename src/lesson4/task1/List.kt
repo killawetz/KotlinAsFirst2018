@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import lesson3.task1.isPrime
 import java.lang.Math.pow
 import kotlin.math.sqrt
@@ -141,9 +142,9 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    for (i in 1 until list.size) {
-        val element = list[i]
-        list[i] = element - mean(list) // NE RABOTAET BLYAT`
+    val average = mean(list)
+    for (i in 0 until list.size) {
+        list[i] -= average
     }
     return list
 }
@@ -215,7 +216,6 @@ fun factorize(n: Int): List<Int> {
             list.add(i)
             buffer /= i
         }
-
     }
     return list
 }
@@ -240,11 +240,12 @@ fun convert(n: Int, base: Int): List<Int> {
     val convertName = mutableListOf<Int>()
     var result: Int
     var buffer = n
-    while (buffer > 0) {
-        result = buffer % base
-        buffer /= base
-        convertName.add(result)
-    }
+    if (n == 0) convertName.add(0)
+        while (buffer > 0) {
+            result = buffer % base
+            buffer /= base
+            convertName.add(result)
+        }
     return convertName.reversed()
 
 }
