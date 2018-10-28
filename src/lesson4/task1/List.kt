@@ -118,10 +118,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    return if (v.isEmpty()) 0.0
-    else sqrt(v.map { it * it }.sum())
-}
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая
@@ -156,13 +153,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double {
-    var result = 0.0
-    for (i in 0 until a.size) {
-        result += a[i] * b[i]
-    }
-    return result
-}
+fun times(a: List<Double>, b: List<Double>): Double = a.zip(b) { r, v -> r * v }.fold(0.0) { times, next -> times + next }
 
 /**
  * Средняя
@@ -241,11 +232,11 @@ fun convert(n: Int, base: Int): List<Int> {
     var result: Int
     var buffer = n
     if (n == 0) convertName.add(0)
-        while (buffer > 0) {
-            result = buffer % base
-            buffer /= base
-            convertName.add(result)
-        }
+    while (buffer > 0) {
+        result = buffer % base
+        buffer /= base
+        convertName.add(result)
+    }
     return convertName.reversed()
 
 }
@@ -286,7 +277,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int = str.toInt(base)
 
 /**
  * Сложная

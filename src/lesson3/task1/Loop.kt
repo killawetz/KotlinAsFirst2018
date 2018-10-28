@@ -90,9 +90,8 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var firstVariable = 1
     var secondVariable = 1
-    var thirdVariable: Int
     for (i in 3..n) {
-        thirdVariable = firstVariable + secondVariable
+        val thirdVariable = firstVariable + secondVariable
         firstVariable = secondVariable
         secondVariable = thirdVariable
     }
@@ -133,14 +132,8 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    val result = 1
-    if (isPrime(n)) return 1
-    for (i in n - 1 downTo 1) {
-        if (n % i == 0) return result * i
-    }
-    return result
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
+
 
 /**
  * Простая
@@ -192,11 +185,10 @@ fun collatzSteps(x: Int): Int {
     var result = 0
     var number = x
     while (number != 1) {
+        result++
         if (number % 2 == 0) {
-            result++
             number /= 2
         } else {
-            result++
             number *= 3
             number++
         }
@@ -281,17 +273,19 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
+fun sequenceDigit(n: Int, func: (Int) -> (Int)): Int {
     var count = 0.0
     var number = 0.0
     var bigNumber: Double
     while (true) {
         number++
-        bigNumber = sqr(number)
+        bigNumber = func(number.toInt()).toDouble()
         count += digitNumber(bigNumber.toInt()).toDouble()
         if (n - count <= 0) return (bigNumber / pow(10.0, count - n) % 10.0).toInt()
     }
 }
+
+fun squareSequenceDigit(n: Int): Int = sequenceDigit(n, ::sqr)
 
 /**
  * Сложная
@@ -302,14 +296,4 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    var count = 0.0
-    var number = 0
-    var bigNumber: Double
-    while (true) {
-        number++
-        bigNumber = fib(number).toDouble()
-        count += digitNumber(bigNumber.toInt()).toDouble()
-        if (n - count <= 0) return (bigNumber / pow(10.0, count - n) % 10.0).toInt()
-    }
-}
+fun fibSequenceDigit(n: Int): Int = sequenceDigit(n, ::fib)
