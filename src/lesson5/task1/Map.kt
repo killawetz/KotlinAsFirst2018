@@ -125,6 +125,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = grades.toLis
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    if (a.isEmpty()) return true
     for ((key, value) in b) {
         if (Pair(a[key], a[value]) == Pair(b[key], b[value])) return true
     }
@@ -161,7 +162,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
-
 /**
  * Сложная
  *
@@ -204,7 +204,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
     for ((key, value) in b) {
-        if (Pair(a[key], a[value]) == Pair(b[key], b[value])) a.remove(key)
+        if (a[key] == value) a.remove(key)
     }
 }
 
@@ -213,14 +213,8 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val list = mutableListOf<String>()
-    for (i in 0 until a.size) {
-        val element = a[i]
-        if (element in b) list.add(element)
-    }
-    return list
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
+
 
 /**
  * Средняя
@@ -235,7 +229,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val buf = word.map { "$it" }
     for (i in 0 until buf.size) {
         val element = buf[i]
-        if (element !in chars.toString()) return false
+        if (element !in chars.joinToString()) return false
     }
     return true
 }
