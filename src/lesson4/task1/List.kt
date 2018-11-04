@@ -125,10 +125,7 @@ fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
-    else list.sum() / list.size
-}
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
 
 /**
  * Средняя
@@ -163,14 +160,7 @@ fun times(a: List<Double>, b: List<Double>): Double = a.zip(b) { r, v -> r * v }
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double {
-    if (p.isEmpty()) return 0.0
-    var result = p[0]
-    for (i in 1 until p.size) {
-        result += p[i] * pow(x, i.toDouble())
-    }
-    return result
-}
+fun polynom(p: List<Double>, x: Double): Double = p.mapIndexed { index, next -> next * pow(x, index.toDouble()) }.sum()
 
 /**
  * Средняя

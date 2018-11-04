@@ -259,7 +259,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> = list.groupingBy { it 
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean = words.map { it.toList().sorted()}.toSet().size != words.size
+
 
 
 /**
