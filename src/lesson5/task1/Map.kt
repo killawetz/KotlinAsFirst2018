@@ -136,7 +136,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy({ it.first }, { it.second })
-        .mapValues { it.value.sum() / it.value.size }
+        .mapValues { it.value.sum() / it.value.size.toDouble() }
 
 
 /**
@@ -220,14 +220,15 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+fun canBuildFrom(chars: List<Char>, word: String): Boolean  {
     val buf = word.map { "$it" }
     for (i in 0 until buf.size) {
-        val element = buf[i]
-        if (element !in chars.joinToString()) return false
+        val element = buf[i].toLowerCase()
+        if (element !in chars.joinToString().toLowerCase()) return false
     }
     return true
 }
+
 
 /**
  * Средняя
