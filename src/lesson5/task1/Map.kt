@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import lesson4.task1.mean
-
 /**
  * Пример
  *
@@ -138,13 +136,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val tempMap: MutableMap<String, MutableList<Double>> = mutableMapOf()
-    stockPrices.forEach { tempMap.getOrPut(it.first) { mutableListOf() }.add(it.second) }
-    val resMap: MutableMap<String, Double> = mutableMapOf()
-    for ((first, second) in tempMap) resMap[first] = mean(second)
-    return resMap
-}
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
+        stockPrices.groupBy({ it.first }, { it.second }).mapValues { it.value.sum() / it.value.size }
 
 
 /**
