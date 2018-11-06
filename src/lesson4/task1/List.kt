@@ -160,7 +160,8 @@ fun times(a: List<Double>, b: List<Double>): Double = a.zip(b) { r, v -> r * v }
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double = p.mapIndexed { index, next -> next * pow(x, index.toDouble()) }.sum()
+fun polynom(p: List<Double>, x: Double): Double =
+        p.foldIndexed(0.0) { index, polynom, next -> polynom + next * pow(x, index.toDouble()) }
 
 /**
  * Средняя
