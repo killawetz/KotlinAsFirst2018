@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+
 /**
  * Пример
  *
@@ -125,6 +127,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = grades.toLis
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all { it.value == b[it.key] }
+
 /**
  * Средняя
  *
@@ -135,8 +138,13 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
-        stockPrices.groupBy { it.first }.mapValues { it.value.map { it.second }.sum() / it.value.size }
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val tempMap: MutableMap<String, MutableList<Double>> = mutableMapOf()
+    stockPrices.forEach { tempMap.getOrPut(it.first) { mutableListOf() }.add(it.second) }
+    val resMap: MutableMap<String, Double> = mutableMapOf()
+    for ((first, second) in tempMap) resMap[first] = mean(second)
+    return resMap
+}
 
 
 /**
@@ -220,7 +228,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean  {
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val buf = word.map { "$it" }
     for (i in 0 until buf.size) {
         val element = buf[i].toLowerCase()
@@ -253,8 +261,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> = list.groupingBy { it 
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = words.map { it.toList().sorted()}.toSet().size != words.size
-
+fun hasAnagrams(words: List<String>): Boolean = words.map { it.toList().sorted() }.toSet().size != words.size
 
 
 /**
