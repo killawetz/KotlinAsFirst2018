@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 
 class Tests {
     @Test
-    @Tag("Example")
+        @Tag("Example")
     fun shoppingListCostTest() {
         val itemCosts = mapOf(
                 "Хлеб" to 50.0,
@@ -144,8 +144,8 @@ class Tests {
                 mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат")),
                 buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
         )
-        assertEquals(
-                mapOf(3 to listOf("Семён", "Михаил", "Марат")),
+            assertEquals(
+                mapOf(3 to listOf("Марат", "Семён", "Михаил")),
                 buildGrades(mapOf("Марат" to 3, "Семён" to 3, "Михаил" to 3))
         )
     }

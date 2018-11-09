@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+
 /**
  * Пример
  *
@@ -95,10 +97,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val fff = mapA + mapB
+    val sumOfTwo = mapA + mapB
     val rez = mutableMapOf<String, String>()
-    mapA.forEach { if (it.value != fff[it.key]) rez[it.key] = "${it.value}, ${fff[it.key]}" }
-    return fff.plus(rez)
+    mapA.forEach { if (it.value != sumOfTwo[it.key]) rez[it.key] = "${it.value}, ${sumOfTwo[it.key]}" }
+    return sumOfTwo + rez
 }
 
 /**
@@ -112,7 +114,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = grades.toList().groupBy({ it.second }, { it.first })
-        .mapValues { it.value.sortedDescending() }
+        .mapValues { it.value }
 
 /**
  * Простая
@@ -137,7 +139,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
-        stockPrices.groupBy({ it.first }, { it.second }).mapValues { it.value.sum() / it.value.size }
+        stockPrices.groupBy{ it.first }.mapValues { mean(it.value.map{it.second})}
 
 
 /**
@@ -221,14 +223,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val buf = word.map { "$it" }
-    for (i in 0 until buf.size) {
-        val element = buf[i].toLowerCase()
-        if (element !in chars.joinToString().toLowerCase()) return false
-    }
-    return true
-}
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.containsAll(word.toList())
 
 
 /**
@@ -275,13 +270,8 @@ fun hasAnagrams(words: List<String>): Boolean = words.map { it.toList().sorted()
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var buf = number
-    for (i in 0 until list.size - 1) {
-        buf -= list[i]
-        for (j in i + 1 until list.size) {
-            if (buf == list[j]) return i to j
-        }
-        buf = number
+    list.forEachIndexed { index, value ->
+        return if (number - value in list) index to list.indexOf(number - value) else -1 to -1
     }
     return -1 to -1
 }
