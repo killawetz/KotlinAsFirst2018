@@ -114,7 +114,6 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = grades.toList().groupBy({ it.second }, { it.first })
-        .mapValues { it.value }
 
 /**
  * Простая
@@ -139,7 +138,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all 
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
-        stockPrices.groupBy{ it.first }.mapValues { mean(it.value.map{it.second})}
+        stockPrices.groupBy { it.first }.mapValues { mean(it.value.map { it.second }) }
 
 
 /**
@@ -158,7 +157,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
-        stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key?.toString()
+        stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key
 
 /**
  * Сложная
@@ -270,8 +269,13 @@ fun hasAnagrams(words: List<String>): Boolean = words.map { it.toList().sorted()
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    list.forEachIndexed { index, value ->
-        return if (number - value in list) index to list.indexOf(number - value) else -1 to -1
+    val mapper = mutableMapOf<Int, Int>()
+    for ((index, value) in list.withIndex()) {
+        val buf = number - value
+        val simple = mapper[buf]
+        if (simple == null) mapper[value] = index
+        else return simple to index
+
     }
     return -1 to -1
 }
