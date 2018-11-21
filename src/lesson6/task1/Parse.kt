@@ -82,7 +82,7 @@ fun dateStrToDigit(str: String): String {
         val year = parts.last().toInt()
         if (day > daysInMonth(month, year) || month == 0) return ""
         return String.format("%02d.%02d.%d", day, month, year)
-    } catch (e: IndexOutOfBoundsException) {
+    } catch (e: Exception) {
         return ""
     }
 }
@@ -98,11 +98,11 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    if (!Regex("""\d{2}\.\d{2}\.\d{1,4}""").matches(digital)) return ""
+    if (!Regex("""\d{2}\.\d{2}\.\d{1,50}""").matches(digital)) return ""
     val digit = digital.split(".")
     val day = digit[0].toInt()
-    if (digit[1].toInt() !in 1..12) return ""
     val oneMonth = digit[1].toInt()
+    if (oneMonth !in 1..12) return ""
     val month = months[oneMonth - 1]
     val year = digit[2].toInt()
     if (day > daysInMonth(oneMonth, year)) return ""
@@ -142,9 +142,8 @@ fun bestLongJump(jumps: String): Int {
     try {
         if (!Regex("""[\d%\-\s]+""").matches(jumps)) return -1
         val part = (Regex("""[^\d]""").split(jumps))
-        return part.max()!!.toInt()
-    }
-    catch (e: NumberFormatException) {
+        return part.filter { it.toIntOrNull() != null }.map { it.toInt() }.max()!!
+    } catch (e: Exception) {
         return -1
     }
 }
@@ -166,6 +165,7 @@ fun bestHighJump(jumps: String): Int {
     for (i in 1 until part.size step 2) {
         if (part[i].contains("+")) list.add(part[i - 1].toInt())
     }
+    if (list.isEmpty()) return -1
     return list.max()!!.toInt()
 }
 
@@ -181,7 +181,7 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     val list = mutableListOf<Int>()
     try {
-        if (!Regex("""(\d*\s+[+-]\s\d+)+|\d""").matches(expression)) throw IllegalArgumentException()
+        if (!Regex("""(\d*\s+[+-]\s\d+)+|\d+""").matches(expression)) throw IllegalArgumentException()
         val part = expression.split(" ")
         list.add(part[0].toInt())
         for (i in 1 until part.size step 2) {
@@ -207,7 +207,7 @@ fun firstDuplicateIndex(str: String): Int {
     var a = 0
     val parts = str.toLowerCase().split(" ")
     for (i in 0 until parts.size - 1) {
-        if (parts[i] == parts[i + 1] )
+        if (parts[i] == parts[i + 1])
             return a
         a += parts[i].length + 1
     }
@@ -226,8 +226,7 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String
-{
+fun mostExpensive(description: String): String {
     if (!Regex("""^\S.*\d$""").matches(description)) return ""
     val parts = description.split("; ")
     val a = parts.map { it.split(" ") }
