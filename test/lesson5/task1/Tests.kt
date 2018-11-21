@@ -266,6 +266,7 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('O'), "o"))
     }
 
     @Test
@@ -307,6 +308,10 @@ class Tests {
         assertEquals(
                 Pair(-1, -1),
                 findSumOfTwo(listOf(1, 2, 3), 6)
+        )
+        assertEquals(
+                Pair(0, 2),
+                findSumOfTwo(listOf(0, 4, 0, 40699, 40699, 1763, 1, 29771), 0)
         )
     }
 
