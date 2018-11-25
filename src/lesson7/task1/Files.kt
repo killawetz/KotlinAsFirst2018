@@ -149,23 +149,25 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     for (i in list) {
         val part = i.trim().split(Regex("""\s+"""))
-        if (part.joinToString(separator = "").length == maxList)
+        if (part.joinToString(separator = "").length == maxList || i.trim().split(Regex("""\s+""")).toList().size < 2 )
             writer.write(i.trim())
-        val sizePart = part.size - 1
-        if (sizePart == 0) {
-            writer.write(i)
-            writer.newLine()
-            continue
-        }
-        val sizeStr = part.joinToString(separator = "").length
-        val spaces = maxList - sizeStr
-        val numberOfSpace = (maxList - sizeStr) / sizePart
-        val deadLineSpace = (maxList - sizeStr) % sizePart
-        for (k in 0 until part.size) {
-            writer.write(part[k])
-            if (k == sizePart) continue
-            if (deadLineSpace > k) writer.write(" ")
-            writer.write(" ".repeat(numberOfSpace))
+        else {
+            val sizePart = part.size - 1
+            if (sizePart == 0) {
+                writer.write(i)
+                writer.newLine()
+                continue
+            }
+            val sizeStr = part.joinToString(separator = "").length
+            val spaces = maxList - sizeStr
+            val numberOfSpace = (maxList - sizeStr) / sizePart
+            val deadLineSpace = (maxList - sizeStr) % sizePart
+            for (k in 0 until part.size) {
+                writer.write(part[k])
+                if (k == sizePart) continue
+                if (deadLineSpace > k) writer.write(" ")
+                writer.write(" ".repeat(numberOfSpace))
+            }
         }
         writer.newLine()
     }
@@ -488,10 +490,19 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     secondDigit = "*" + " ".repeat(maxDigit.length - secondDigit.length - 1) + secondDigit
     writer.write(firstDigit + "\n" + secondDigit + "\n" + dash + "\n"
             + (bufferDigit % 10 * lhv).toString().padStart(maxDigit.length) + "\n")
-    while (bufferDigit > 10) {
-        bufferDigit /= 10
-        writer.write(("+" + ((bufferDigit % 10 * lhv).toString()).padStart(bufferMax - 1) + "\n"))
-        bufferMax -= 1
+    if(lhv < rhv) {
+        while (bufferDigit > 1) {
+            bufferDigit /= 10
+            writer.write(("+" + ((bufferDigit % 10 * lhv).toString()).padStart(bufferMax - 1) + "\n"))
+            bufferMax -= 1
+        }
+    }
+        else {
+        while (bufferDigit > 10) {
+            bufferDigit /= 10
+            writer.write(("+" + ((bufferDigit % 10 * lhv).toString()).padStart(bufferMax - 1) + "\n"))
+            bufferMax -= 1
+        }
     }
     writer.write(dash + "\n" + maxDigit)
     writer.close()
