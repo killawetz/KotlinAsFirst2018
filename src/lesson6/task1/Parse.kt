@@ -98,15 +98,15 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    if (!Regex("""\d{2}\.\d{2}\.\d{1,50}""").matches(digital)) return ""
+    if (!Regex("""\d{2}\.\d{2}\.\d+""").matches(digital)) return ""
     val digit = digital.split(".")
-    val day = digit[0].toInt()
+    val day = digit[0]
     val oneMonth = digit[1].toInt()
     if (oneMonth !in 1..12) return ""
     val month = months[oneMonth - 1]
     val year = digit[2].toInt()
-    if (day > daysInMonth(oneMonth, year)) return ""
-    return String.format("%s %s %s", day, month, year)
+    if (day.toInt() > daysInMonth(oneMonth, year)) return ""
+    return digit.joinToString(separator = " ")
 }
 
 /**
@@ -122,7 +122,7 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    if (!Regex("""([\-]|\s|[0-9]|\+|\(|\))+""").matches(phone)) return ""
+    if (!Regex("""[\-\s0-9+()]+""").matches(phone)) return ""
     val part = (Regex("""[^\d\\+]""").split(phone))
     return part.joinToString(separator = "")
 }
@@ -140,7 +140,7 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     try {
-        if (!Regex("""[\d%\-\s]+""").matches(jumps)) return -1
+        if (!Regex("""^\d[\d%\-\s]+""").matches(jumps)) return -1
         val part = (Regex("""[^\d]""").split(jumps))
         return part.filter { it.toIntOrNull() != null }.map { it.toInt() }.max()!!
     } catch (e: Exception) {
@@ -179,19 +179,10 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val list = mutableListOf<Int>()
-    try {
-        if (!Regex("""(\d*\s+[+-]\s\d+)+|\d+""").matches(expression)) throw IllegalArgumentException()
-        val part = expression.split(" ")
-        list.add(part[0].toInt())
-        for (i in 1 until part.size step 2) {
-            if (part[i].contains("-")) list.add((-1) * part[i + 1].toInt())
-            if (part[i].contains("+")) list.add(part[i + 1].toInt())
-        }
-    } catch (e: IllegalArgumentException) {
-        throw IllegalArgumentException()
-    }
-    return list.sum()
+    val list = mutableListOf<String>()
+    if (!Regex("""(\d*\s+[+-]\s\d+)+|\d+""").matches(expression)) throw IllegalArgumentException()
+    Regex("""(^\d+)|[+-]\s\d+""").findAll(expression).forEach { list.add(it.value) }
+    return list.map { it.replace(" ", "").toInt() }.sum()
 }
 
 /**
@@ -283,4 +274,72 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val conveyor = mutableListOf<Int>()
+    var limitSteps = limit
+    val parts = commands.split("").drop(1).dropLast(1)
+    if (!Regex("""[<>+\s-\[\]]+""").matches(commands)) throw IllegalArgumentException()
+    if (commands.contains("[") && !commands.contains("]") || !commands.contains("[") && commands.contains("]"))
+        throw IllegalArgumentException()
+    for (i in 0 until cells) {
+        conveyor.add(0)
+    }
+    var bufferConveyor = conveyor.size / 2
+    var element = 0
+    while (element != parts.size) {
+        if (limitSteps <= 0) throw IllegalStateException()
+        if (bufferConveyor > conveyor.size || bufferConveyor < 0) throw IllegalStateException()
+        when (parts[element]) {
+            " " -> {
+                element++
+                limitSteps--
+            }
+            "+" -> {
+                element++
+                conveyor[bufferConveyor] += 1
+                limitSteps--
+            }
+            "-" -> {
+                element++
+                conveyor[bufferConveyor] -= 1
+                limitSteps--
+            }
+            ">" -> {
+                element++
+                bufferConveyor++
+                limitSteps--
+            }
+            "<" -> {
+                element++
+                bufferConveyor--
+                limitSteps--
+            }
+            "[" -> {
+                if (conveyor[bufferConveyor] == 0) {
+                    while (parts[element] != "]") {
+                        element++
+                    }
+                    limitSteps--
+                    element++
+                } else {
+                    element++
+                    limitSteps--
+                }
+            }
+            "]" -> {
+                if (conveyor[bufferConveyor] != 0) {
+                    while (parts[element] != "[") {
+                        element--
+                    }
+                    limitSteps--
+                    element++
+                } else {
+                    element++
+                    limitSteps--
+                }
+            }
+        }
+    }
+    return conveyor
+}
+ // dodelayu kogda-nibud`

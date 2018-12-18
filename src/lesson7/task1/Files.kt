@@ -132,7 +132,7 @@ fun centerFile(inputName: String, outputName: String) {
  * Равномерность определяется следующими формальными правилами:
  * 5) Число пробелов между каждыми двумя парами соседних слов не должно отличаться более, чем на 1.
  * 6) Число пробелов между более левой парой соседних слов должно быть больше или равно числу пробелов
- *    между более правой парой соседних слов.
+ *    между более правой парой соседних слов .
  *
  * Следует учесть, что входной файл может содержать последовательности из нескольких пробелов  между слвоами. Такие
  * последовательности следует учитывать при выравнивании и при необходимости избавляться от лишних пробелов.
@@ -149,7 +149,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     for (i in list) {
         val part = i.trim().split(Regex("""\s+"""))
-        if (part.joinToString(separator = "").length == maxList || i.trim().split(Regex("""\s+""")).toList().size < 2 )
+        if (part.joinToString(separator = "").length == maxList || i.trim().split(Regex("""\s+""")).toList().size < 2)
             writer.write(i.trim())
         else {
             val sizePart = part.size - 1
@@ -491,13 +491,13 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     writer.write(firstDigit + "\n" + secondDigit + "\n" + dash + "\n"
             + (bufferDigit % 10 * lhv).toString().padStart(maxDigit.length) + "\n")
     if(lhv < rhv) {
-        while (bufferDigit > 1) {
+        while (bufferDigit > 10) {
             bufferDigit /= 10
             writer.write(("+" + ((bufferDigit % 10 * lhv).toString()).padStart(bufferMax - 1) + "\n"))
             bufferMax -= 1
         }
     }
-        else {
+        if (lhv > rhv) {
         while (bufferDigit > 10) {
             bufferDigit /= 10
             writer.write(("+" + ((bufferDigit % 10 * lhv).toString()).padStart(bufferMax - 1) + "\n"))
@@ -530,24 +530,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    val division = lhv / rhv
-    val remainder = lhv % rhv
-
-    if (rhv > lhv) {
-        writer.write(" $lhv | $rhv")
-        writer.newLine()
-        writer.write(" ".repeat(digitNumber(lhv) - 1) + "-0" + "   0" + "\n"
-                + " ".repeat(digitNumber(lhv) - 1) + "-".repeat(2) + "\n"
-                + " ".repeat(digitNumber(lhv)) + lhv.toString())
-    } else {
-        writer.write(" $lhv | $rhv\n")
-        writer.write(" ")
-    }
-
-    writer.close()
-
-    // ne uspel do dedlaina
+   TODO()
 }
 
 
